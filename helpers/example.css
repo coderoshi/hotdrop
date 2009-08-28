@@ -1,0 +1,5 @@
+/* Hot Drop Examples */
+
+.hotdrop-loading {
+  background:url(example-busy.gif) no-repeat 12px 0px;
+}

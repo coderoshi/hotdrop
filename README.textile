@@ -28,17 +28,21 @@ I won't consider this project a success unless the following items are all true.
 
 * Must close the drop-down when bluring the input field or clicking outside the drop-down
 
+* Must allow for submission throttling before hand and caching values afterwards
+
 * Must highlight matching typed characters in the dropdown data set
 
 * Must work on as many browsers as possible, otherwise degrade
 
 * Must use no toolkit beyond standard jquery
 
+* Must be unobtrusive javascript
+
 * Must look nice (or hot!), and feel natural to the user (not heavyweight or klunky)
 
-* Must be easy to use (every choice must have reasonable defaults)
+* Must be easy to use (every choice must have reasonable defaults and at least one implementation)
+
+* All above items must be optional and customizable
 
 * Must be well documented so I don't have to talk to anyone
-
-* All above items must be optional and overrideable
 

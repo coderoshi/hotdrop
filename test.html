@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+  <title>HotDrop Test Page</title>
+  
+  <script type="text/javascript" src="helpers/jquery-1.3.2.min.js"></script>
+  <script type="text/javascript" src="hotdrop.js"></script>
+  <link rel="StyleSheet" type="text/css" href="helpers/example.css" media="screen"/>
+  <link rel="StyleSheet" type="text/css" href="hotdrop.css" media="screen"/>
+</head>
+<body>
+
+<h1>Simple</h1>
+<p>This is a simple drop-down with greetings from a single local datasource</p>
+<input id="search" class="hotdropped" name="input" autocomplete="off" />
+<div id="search_suggest" class="hotdropper"></div>
+
+<h1>Multiple Datasources</h1>
+<p>This drops greetings and farewells from two datasources, labeled by headers and a custom output post processor (greetings append "!" to the chosen string)</p>
+<input id="niceties" class="hotdropped" name="input" autocomplete="off" />
+<div id="niceties_suggest" class="hotdropper"></div>
+
+<h1>Multiple Value Populate</h1>
+<p>This allows a user to choose a greeting, then another, then another</p>
+<input id="multi" class="hotdropped" name="input" autocomplete="off" />
+<div id="multi_suggest" class="hotdropper"></div>
+
+<h1>Textarea</h1>
+<p>Hot Drop isn't limited to text input fields (I've never quite figured out why so many search suggestion drop downs are)</p>
+<textarea id="texty" class="hotdropped" name="input"></textarea>
+<div id="texty_suggest" class="hotdropper"></div>
+
+
+<h1>Remote Datasource</h1>
+<p>All example so far have been local arrays of data. Here is an example of a remote datasource (in this case, On-Demand Javascript) and how to process the output</p>
+<input id="odjs" class="hotdropped" name="input" autocomplete="off" />
+<div id="odjs_suggest" class="hotdropper"></div>
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+<script type="text/javascript">
+  // TODO: make case-insensitive
+
+  // Simple
+  // hs1 = new HotDataSource({ data: ['aloha','bon jorno','hello','hallo','hi','ohai','yo','hola','guten tag','shalom'] });
+  // drop1 = new HotDrop({
+  //   datasources:[hs1]
+  // });
+  // drop1.attach();
+  
+  makeHotDrop( ['aloha','bon jorno','hello','hallo','hi','ohai','yo','hola','guten tag','shalom'] );
+  // makeHotDrop( new HotDataSource({data:['aloha','bon jorno','hello','hallo','hi','ohai','yo','hola','guten tag','shalom']}) );
+  
+  
+  // Multiple Datasources
+  hs2 = new HotDataSource({
+    header: 'Greetings',
+    data: ['aloha','bon jorno','hello','hallo','hark','hi','ohai','yo','hola','guten tag','shalom'],
+    post_process_output: function(item) { return item + "!"; }
+  });
+  hs3 = new HotDataSource({
+    header: 'Farewells',
+    data: ['adieu','auf wiedersehen','bye','good bye','hafta go','see ya','kthnxbai']
+  });
+  drop2 = new HotDrop({
+    field_id:'niceties',
+    drop_id:'niceties_suggest',
+    datasources:[hs2, hs3]
+  });
+  drop2.attach();
+  
+  
+  // Multiple Value Populate
+  hs4 = new HotDataSource({
+    data: ['aloha','bon jorno','hello','hallo','hark','hi','ohai','yo','hola','guten tag','shalom']
+  });
+  drop3 = new HotDrop({
+    field_id:'multi',
+    drop_id:'multi_suggest',
+    datasources:[hs4],
+    multiples:true
+  });
+  drop3.attach();
+  
+  
+  // Textarea
+  hs5 = new HotDataSource({
+    data: ['aloha','bon jorno','hello','hallo','hark','hi','ohai','yo','hola','guten tag','shalom']
+  });
+  drop4 = new HotDrop({
+    field_id:'texty',
+    drop_id:'texty_suggest',
+    datasources:[hs5],
+    multiples:true
+  });
+  drop4.attach();
+  
+  
+  // Remote Datasource
+  hs6 = new HotDataSource({
+    header:   'Google',
+    url:      'http://www.google.com/complete/search?hl=en&client=suggest&js=true&q=',
+    url_type: 'odjs',
+    remote_params: function(processed_input) {
+      return {q:processed_input, hl:'en', client:'suggest', js:'true'};
+    },
+    post_process_output: function(item) { 
+      return item[0];
+  });
+  drop5 = new HotDrop({
+    field_id:'odjs',
+    drop_id:'odjs_suggest',
+    datasources:[hs6],
+    multiples:true
+  });
+  drop5.attach();
+  
+  var google = {
+    ac: {
+      h: function(val) {
+        var term = val[0];
+        var data = val[1];
+        hs6.populate(data);
+      }
+    }
+  };
+</script>
+
+</body>

@@ -1,0 +1,44 @@
+/* Hot Drop basic skin */
+
+.hotdropped {
+  border:1px solid #666;
+  background-color:#eee;
+  width:280px;
+}
+.hotdropper {
+  position:absolute;
+  border:1px solid #666;
+  background-color:#eee;
+  cursor:default;
+  min-width:280px;
+  padding:2px;
+  z-index:10000;
+}
+.hotdrop-title {
+  font-size:0.8em;
+  text-align:center;
+  margin:0px;
+  padding:0px;
+  background-color:#333;
+  color:white;
+  text-transform:uppercase;
+}
+.hotdrop-select {
+  cursor:default;
+  background-color:#ccc;
+  padding-left:12px;
+}
+.hotdrop-unselect {
+  padding-left:12px;
+}
+.hotdrop-loading {
+  display:block;
+  width:100%;
+  height:16px;
+  margin:4px;
+  padding-left:30px;
+}
+.hotdrop-empty {
+  padding-left:10px;
+  margin:4px;
+}
