@@ -120,11 +120,13 @@
     },
     post_process_output: function(item) { 
       return item[0];
+    }
   });
+  hs1 = new HotDataSource({ data: []}); //'aloha','bon jorno','hello','hallo','hi','ohai','yo','hola','guten tag','shalom'] });
   drop5 = new HotDrop({
     field_id:'odjs',
     drop_id:'odjs_suggest',
-    datasources:[hs6],
+    datasources:[hs1, hs6],
     multiples:true
   });
   drop5.attach();

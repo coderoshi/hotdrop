@@ -10,25 +10,27 @@ I won't consider this project a success unless the following items are all true.
 
 * Must allow single or multiple elements chosen (separated by custom char)
 
-* Must allow datasource from a local array, object, or remote (ajax)
+* Must allow datasource from a local array, object, or remote (ajax, on-demand javascript, json, etc)
 
-* Must allow custom parsing of remote datasource
+* Must allow custom parsing of datasource
 
-* Must allow multiple simulates datasources of various type
+* Must allow multiple simulates datasources of various types (eg. 1 local + 2 ajax)
 
-* Must be able to limit result sets, both by total and by datasource
+* Must optionally limit result sets, both by total and per datasource
 
-* Must be able to seperate datasources with a non-clickable header
+* Must optionally seperate datasources with a non-clickable header
 
-* Must be able to pre-parse input data (eg. only word chars count)
+* Must optionally pre-parse input data (eg. ignore all non-word characters for purposes of searching)
 
-* Must be able suspend drop-down until a minimum number of chars are typed
+* Must optionally suspend drop-down until a minimum number of chars are typed
 
-* Must be able to move elements up/down with keyboard, tab/enter to choose item, esc to close
+* Must allow for submission throttling
+
+* Must allow for caching return values
+
+* Must be able to move though elements via keyboard up/down, tab/enter to choose item, esc to close
 
 * Must close the drop-down when bluring the input field or clicking outside the drop-down
-
-* Must allow for submission throttling before hand and caching values afterwards
 
 * Must highlight matching typed characters in the dropdown data set
 
