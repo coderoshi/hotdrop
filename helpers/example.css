@@ -3,3 +3,7 @@
 .hotdrop-loading {
   background:url(example-busy.gif) no-repeat 12px 0px;
 }
+
+textarea {
+  height:4em;
+}
