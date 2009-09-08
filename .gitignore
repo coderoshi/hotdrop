@@ -1,5 +1,6 @@
 .DS_Store
-log/*.log
-tmp/**/*
-doc/api
-doc/app
+*~
+.gitignore
+tmp
+scratch_directory
+.idea
