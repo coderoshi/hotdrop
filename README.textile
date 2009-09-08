@@ -1,4 +1,4 @@
-h1. HotDrop: Drop-down like it's hot.
+h1. Drop It Like It's Hot: A javascript Drop-down box
 
 This is a general-purpose jQuery-based drop-down box. Multi-purpose from simple search suggestions to multi-source textarea populators (like the gmail email chooser).
 
@@ -48,3 +48,20 @@ I won't consider this project a success unless the following items are all true.
 
 * Must be well documented so I don't have to talk to anyone
 
+
+h3. Examples
+
+You can play with "Drop It Like It's Hot here":http://coderoshi.appspot.com/hotdrop/test.html
+This is the same. Example in the git repository "test.html". It has been tested in the following browsers:
+
+h4. On Mac OSX
+
+* Safari 4.0
+
+* FireFox 3.5
+
+* Chrome 4.0
+
+It doesn't yet work in IE 7. 
+
+Testing other OS/browser combinations would be great.
