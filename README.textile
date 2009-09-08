@@ -52,7 +52,7 @@ I won't consider this project a success unless the following items are all true.
 h3. Examples
 
 You can play with "Drop It Like It's Hot here":http://coderoshi.appspot.com/hotdrop/test.html
-This is the same. Example in the git repository "test.html". It has been tested in the following browsers:
+This is the same example as the git repository "test.html". It has been tested in the following browsers:
 
 h4. On Mac OSX
 
