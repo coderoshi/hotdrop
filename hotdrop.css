@@ -4,6 +4,7 @@
   border:1px solid #666;
   background-color:#eee;
   width:280px;
+  display:block;
 }
 .hotdropper {
   position:absolute;

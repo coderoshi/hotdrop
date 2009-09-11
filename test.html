@@ -7,7 +7,7 @@
   <script type="text/javascript" src="hotdrop.js"></script>
   <link rel="StyleSheet" type="text/css" href="helpers/example.css" media="screen"/>
   <link rel="StyleSheet" type="text/css" href="hotdrop.css" media="screen"/>
-  
+
   <script type="text/javascript">
   jQuery(document).ready(function() {
 
@@ -31,8 +31,8 @@
       datasources:[hs2, hs3]
     });
     drop2.attach();
-
-
+    
+    
     // Multiple Value Populate
     hs4 = new HotDataSource({
       data: ['aloha','bon jorno','hello','hallo','hark','hi','ohai','yo','hola','guten tag','shalom']
@@ -44,14 +44,14 @@
       multiples:true
     });
     drop3.attach();
-
-
+    
+    
     // Remote Datasource
     hs6 = new HotDataSource({
       header:   'Google',
       url:      'http://www.google.com/complete/search?hl=en&client=suggest&js=true&q=',
       url_type: 'odjs',
-      limit:    5,
+      limit:5,
       remote_params: function(processed_input) {
         return {q:processed_input, hl:'en', client:'suggest', js:'true'};
       },
@@ -63,11 +63,12 @@
       header:   'Yahoo',
       url:      'http://api.search.yahoo.com/WebSearchService/V1/webSearch?appid=hotdrop&output=json&callback=ws_results&results=5&query=',
       url_type: 'odjs',
-      limit:    5,
+      limit:5,
       remote_params: function(processed_input) {
         return {query:processed_input, appid:'hotdrop', callback:'ws_results'};
       },
       post_process_output: function(item) { 
+        // return item[0];
         return item['Title'];
       }
     });
@@ -84,7 +85,7 @@
     // alert(json['ResultSet']['Result'][0]['Title']);
     hs7.populate(json['ResultSet']['Result']);
   }
-
+  
   // Datastructure and call-back for Google's JavasScript On-Demand
   var google = {
     ac: {

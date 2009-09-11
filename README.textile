@@ -48,6 +48,13 @@ I won't consider this project a success unless the following items are all true.
 
 * Must be well documented so I don't have to talk to anyone
 
+h3. Installation
+
+You only need to grab the "hotdrop.js" file to use the toolkit. "hotdrop.css" is also useful for a common format. jQuery is also required. There is a sample "jQuery-1.3.2.js" file under the "helpers" directory - which exists for testing and examples.
+
+In short - dependency:
+
+* "jQuery":http://docs.jquery.com/Downloading_jQuery
 
 h3. Examples
 
@@ -62,6 +69,6 @@ h4. On Mac OSX
 
 * Chrome 4.0
 
-It doesn't yet work in IE 7. 
+* IE 7.0
 
-Testing other OS/browser combinations would be great.
+Testing other OS/browser combinations would be great, eh?
