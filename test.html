@@ -7,7 +7,7 @@
   <script type="text/javascript" src="hotdrop.js"></script>
   <link rel="StyleSheet" type="text/css" href="helpers/example.css" media="screen"/>
   <link rel="StyleSheet" type="text/css" href="hotdrop.css" media="screen"/>
-
+  
   <script type="text/javascript">
   jQuery(document).ready(function() {
 
@@ -51,7 +51,7 @@
       header:   'Google',
       url:      'http://www.google.com/complete/search?hl=en&client=suggest&js=true&q=',
       url_type: 'odjs',
-      limit:5,
+      limit:    5,
       remote_params: function(processed_input) {
         return {q:processed_input, hl:'en', client:'suggest', js:'true'};
       },
@@ -63,12 +63,11 @@
       header:   'Yahoo',
       url:      'http://api.search.yahoo.com/WebSearchService/V1/webSearch?appid=hotdrop&output=json&callback=ws_results&results=5&query=',
       url_type: 'odjs',
-      limit:5,
+      limit:    5,
       remote_params: function(processed_input) {
         return {query:processed_input, appid:'hotdrop', callback:'ws_results'};
       },
       post_process_output: function(item) { 
-        // return item[0];
         return item['Title'];
       }
     });
@@ -76,7 +75,7 @@
     drop5 = new HotDrop({
       field_id:'odjs',
       drop_id:'odjs_suggest',
-      datasources:[hs1, hs6, hs7],
+      datasources:[hs1, hs6, hs7]
     });
     drop5.attach();
   });
