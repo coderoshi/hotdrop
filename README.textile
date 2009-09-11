@@ -69,6 +69,8 @@ h4. On Mac OSX
 
 * Chrome 4.0
 
+h4. On Windows XP
+
 * IE 7.0
 
 Testing other OS/browser combinations would be great, eh?
