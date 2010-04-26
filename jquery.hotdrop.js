@@ -87,7 +87,7 @@ new function(jQuery) {
       var matches = [];
       for(var i=0; i<this.hot_data.length; i++) {
         var cc = this.hot_data[i];
-        if(this.hot_data[i].match(new RegExp("^"+prefix, "i"))==prefix) {
+        if(!!this.hot_data[i].match(new RegExp("^"+prefix, "i"))) {
           matches.push(cc);
         }
       }
