@@ -4,98 +4,94 @@
   <title>HotDrop Test Page</title>
   
   <script type="text/javascript" src="helpers/jquery-1.3.2.min.js"></script>
-  <script type="text/javascript" src="hotdrop.js"></script>
+  <script type="text/javascript" src="jquery.hotdrop.js"></script>
   <link rel="StyleSheet" type="text/css" href="helpers/example.css" media="screen"/>
   <link rel="StyleSheet" type="text/css" href="hotdrop.css" media="screen"/>
 
   <script type="text/javascript">
   jQuery(document).ready(function() {
-
-    // Simple
-    makeHotDrop( ['aloha','bon jorno','hello','hallo','hi','ohai','yo','hola','guten tag','shalom'] );
-
-
-    // Multiple Datasources
-    hs2 = new HotDataSource({
-      header: 'Greetings',
-      data: ['aloha','bon jorno','hello','hallo','hark','hi','ohai','yo','hola','guten tag','shalom'],
-      post_process_output: function(item) { return item + "!"; }
-    });
-    hs3 = new HotDataSource({
-      header: 'Farewells',
-      data: ['adieu','auf wiedersehen','bye','good bye','hafta go','see ya','kthnxbai']
-    });
-    drop2 = new HotDrop({
-      field_id:'niceties',
-      drop_id:'niceties_suggest',
-      datasources:[hs2, hs3]
-    });
-    drop2.attach();
     
+    // Simple
+    $('#search').hotdrop({
+      // drop_selector:'#search_suggest',
+      datasources:[{
+        data: ['aloha','bon jorno','hello','hallo','hi','ohai','yo','hola','guten tag','shalom'],
+        empty: null
+      }]
+    });
+    
+    // Multiple Datasources
+    $('#niceties').hotdrop({
+      drop_selector:'#niceties_suggest',
+      datasources:[{
+        header: 'Greetings',
+        data: ['aloha','bon jorno','hello','hallo','hark','hi','ohai','yo','hola','guten tag','shalom'],
+        post_process_output: function(item) { return item + "!"; }
+      },{
+        header: 'Farewells',
+        data: ['adieu','auf wiedersehen','bye','good bye','hafta go','see ya','kthnxbai']
+      }]
+    });
     
     // Multiple Value Populate
-    hs4 = new HotDataSource({
-      data: ['aloha','bon jorno','hello','hallo','hark','hi','ohai','yo','hola','guten tag','shalom']
+    $('#multi').hotdrop({
+      drop_selector:'#multi_suggest',
+      multiples:true,
+      datasources:[{
+        data:['aloha','bon jorno','hello','hallo','hark','hi','ohai','yo','hola','guten tag','shalom']
+      }]
     });
-    drop3 = new HotDrop({
-      field_id:'multi',
-      drop_id:'multi_suggest',
-      datasources:[hs4],
-      multiples:true
-    });
-    drop3.attach();
     
-    
-    // Remote Datasource
-    hs6 = new HotDataSource({
-      header:   'Google',
-      url:      'http://www.google.com/complete/search?hl=en&client=suggest&js=true&q=',
-      url_type: 'odjs',
-      limit:5,
-      remote_params: function(processed_input) {
-        return {q:processed_input, hl:'en', client:'suggest', js:'true'};
-      },
-      post_process_output: function(item) { 
-        return item[0];
-      }
-    });
-    hs7 = new HotDataSource({
-      header:   'Yahoo',
-      url:      'http://api.search.yahoo.com/WebSearchService/V1/webSearch?appid=hotdrop&output=json&callback=ws_results&results=5&query=',
-      url_type: 'odjs',
-      limit:5,
-      remote_params: function(processed_input) {
-        return {query:processed_input, appid:'hotdrop', callback:'ws_results'};
-      },
-      post_process_output: function(item) { 
-        // return item[0];
-        return item['Title'];
-      }
-    });
-    hs1 = new HotDataSource({data:[]});
-    drop5 = new HotDrop({
-      field_id:'odjs',
-      drop_id:'odjs_suggest',
-      datasources:[hs1, hs6, hs7]
-    });
-    drop5.attach();
+    // // Remote Datasource
+    // hs6 = new HotDataSource({
+    //   header:   'Google',
+    //   url:      'http://www.google.com/complete/search?hl=en&client=suggest&js=true&q=',
+    //   url_type: 'odjs',
+    //   limit:5,
+    //   remote_params: function(processed_input) {
+    //     return {q:processed_input, hl:'en', client:'suggest', js:'true'};
+    //   },
+    //   post_process_output: function(item) { 
+    //     return item[0];
+    //   }
+    // });
+    // hs7 = new HotDataSource({
+    //   header:   'Yahoo',
+    //   url:      'http://api.search.yahoo.com/WebSearchService/V1/webSearch?appid=hotdrop&output=json&callback=ws_results&results=5&query=',
+    //   url_type: 'odjs',
+    //   limit:5,
+    //   remote_params: function(processed_input) {
+    //     return {query:processed_input, appid:'hotdrop', callback:'ws_results'};
+    //   },
+    //   post_process_output: function(item) { 
+    //     // return item[0];
+    //     return item['Title'];
+    //   }
+    // });
+    // hs1 = new HotDataSource({data:[]});
+    // drop5 = new HotDrop({
+    //   field_id:'odjs',
+    //   drop_id:'odjs_suggest',
+    //   datasources:[hs1, hs6, hs7]
+    // });
+    // drop5.attach();
   });
-
-  function ws_results(json) {
-    // alert(json['ResultSet']['Result'][0]['Title']);
-    hs7.populate(json['ResultSet']['Result']);
-  }
   
-  // Datastructure and call-back for Google's JavasScript On-Demand
-  var google = {
-    ac: {
-      h: function(val) {
-        var term = val[0];
-        var data = val[1];
-        hs6.populate(data);
-      }
-    }
-  };
+  // function ws_results(json) {
+  //   // alert(json['ResultSet']['Result'][0]['Title']);
+  //   hs7.populate(json['ResultSet']['Result']);
+  // }
+  // 
+  // // Datastructure and call-back for Google's JavasScript On-Demand
+  // var google = {
+  //   ac: {
+  //     h: function(val) {
+  //       var term = val[0];
+  //       var data = val[1];
+  //       hs6.populate(data);
+  //     }
+  //   }
+  // };
   </script>
 
 </head>
@@ -104,7 +100,7 @@
 <h1>Simple</h1>
 <p>This is a simple drop-down with greetings from a single local datasource</p>
 <input id="search" class="hotdropped" name="input" autocomplete="off" />
-<div id="search_suggest" class="hotdropper"></div>
+<!-- <div id="search_suggest" class="hotdropper"></div> -->
 
 <h1>Multiple Datasources</h1>
 <p>This drops greetings and farewells from two datasources, labeled by headers and a custom output post processor (greetings append "!" to the chosen string)</p>
@@ -116,10 +112,10 @@
 <textarea id="multi" class="hotdropped" name="input"></textarea>
 <div id="multi_suggest" class="hotdropper"></div>
 
-<h1>Remote Datasource</h1>
+<!-- <h1>Remote Datasource</h1>
 <p>All example so far have been local arrays of data. Here is an example of a remote datasource (in this case, On-Demand Javascript) and how to process the output</p>
 <input id="odjs" class="hotdropped" name="input" autocomplete="off" />
-<div id="odjs_suggest" class="hotdropper"></div>
+<div id="odjs_suggest" class="hotdropper"></div> -->
 
 <br/>
 <br/>
