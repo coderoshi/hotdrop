@@ -42,16 +42,6 @@ new function(jQuery) {
   var _hot_current = -1;
   var _hot_size = 0;
   var _hot_current_value = "";
-  
-  putDropListValueInField = function(field, new_str, len, multiples) {
-    var val = field.val();
-    if( multiples ) {
-      field.val(val.substring(0, val.length-len) + new_str + ", ");
-    } else {
-      field.val(new_str);
-    }
-  }
-  
   var _hot_section_count = 0;
   var _hot_complete_load_empty = 0;
   
@@ -96,7 +86,7 @@ new function(jQuery) {
       var matches = [];
       for(var i=0; i<this.hot_data.length; i++) {
         var cc = this.hot_data[i];
-        if(!!this.hot_data[i].match(new RegExp("^"+prefix, "i"))) {
+        if(!!this.hot_data[i].match(new RegExp(prefix, "i"))) {
           matches.push(cc);
         }
       }
@@ -130,6 +120,7 @@ new function(jQuery) {
       return {input: processed_input};
     }
 
+    if( params['match_finder'] ) this.match_finder = params['match_finder'];
     if( params['pre_process_input'] ) this.pre_process_input = params['pre_process_input'];
     if( params['pre_process_output'] ) this.pre_process_output = params['pre_process_output'];
     if( params['post_process_output'] ) this.post_process_output = params['post_process_output'];
@@ -149,9 +140,7 @@ new function(jQuery) {
     if( processed_input.length < this.min_chars ) {
       return;
     }
-    
-    // TODO: use a string encoding for interpolating url
-    
+
     // get data from ajax or data
     if( this.url ) {
       var section_id = "#" + this.section_id();
@@ -241,10 +230,10 @@ new function(jQuery) {
 
         // on click copy the result text to the search field and hide
         d.click( function(event) {
-          putDropListValueInField(self.hot_drop.field, this.childNodes[0].nodeValue, self.hot_drop.input.length, self.hot_drop.multiples);
+          self.hot_drop.populate_field(self.hot_drop.field, this.childNodes[0].nodeValue, self.hot_drop.input.length, self.hot_drop.multiples);
           self.hot_drop.clear_drop(self.drop_selector);
-          self.field.focus();
-          self.field.setCursorPosition( self.field.val().length );
+          self.hot_drop.field.focus();
+          self.hot_drop.field.setCursorPosition( self.hot_drop.field.val().length );
         });
 
         if( header_exists ) {
@@ -279,6 +268,16 @@ new function(jQuery) {
     this.pre_process_input = function( input ) {
       return input.replace(/[\[\]'",.()<> ]/gi, "");
     };
+    
+    this.populate_field = function(field, data, len, multiples) {
+      var val = field.val();
+      if( multiples ) {
+        field.val(val.substring(0, val.length-len) + data + ", ");
+      } else {
+        field.val(data);
+      }
+    };
+    if( params['populate_field'] ) this.populate_field = params['populate_field'];
     
     this.clear_drop = function( selector, hide ) {
       jQuery( selector ).hide();
@@ -381,9 +380,9 @@ new function(jQuery) {
         // var val = data_field.val();
         // data_field.val(val.substring(0, val.length-len) + new_str + ", ");
         
-        putDropListValueInField(self.field, _hot_current_value, input.length, self.multiples);
+        self.populate_field(self.field, _hot_current_value, input.length, self.multiples);
         
-        // putDropListValueInField(data_field, v, input.length, this.hot_drop.multiples);
+        // self.populate_field(data_field, v, input.length, this.hot_drop.multiples);
         // self.hot_drop.clear_drop(self.drop_selector);
         // data_field.focus();
         // data_field.setCursorPosition( data_field.val().length );
