@@ -8,15 +8,17 @@ KEY_ESC   = 27;
 KEY_UP    = 38;
 KEY_DOWN  = 40;
 
+// TODO: replace this when fixed in Chrome
 /*
  * Populates these global vars on mouse movement.
  * Necessary to close drop-down on field blur except
  * when clicking inside the drop-down itself.
  */
-jQuery().mousemove(function(e) {
-  pageX = e.pageX;
-  pageY = e.pageY;
-});
+// jQuery().mousemove(function(e) {
+//   pageX = e.pageX;
+//   pageY = e.pageY;
+//   alert(pageY);
+// });
 
 new function(jQuery) {
   jQuery.fn.setCursorPosition = function(pos) {
@@ -36,6 +38,7 @@ new function(jQuery) {
  * Represents a single field, dropbox, and collection of datasources.
  */
 (function() {
+
   var _hot_current = -1;
   var _hot_size = 0;
   var _hot_current_value = "";
@@ -58,7 +61,7 @@ new function(jQuery) {
   function HotDataSource(params) {
     this.empty = null;
     this.max = null;
-    
+
     this.url = params.url;
     this.url_params = params.url_params;
     this.url_type = params.url_type;
@@ -70,9 +73,15 @@ new function(jQuery) {
     this.section = ++_hot_section_count;
     this.limit = params.limit;
     if( !this.limit ) this.limit = 10;
+    this.min_chars = params.min_chars;
+    if( !this.min_chars ) this.min_chars = 1;
 
     this.drop_selector = '#search_suggest';
     this.hot_drop = null;
+
+    this.get_datasource = function(self) {}
+    if(params['get_datasource']) this.get_datasource = params['get_datasource'];
+    this.get_datasource(this);
 
     // TODO: insert empty string data if overridden
     this.match_not_found = function() {
@@ -137,6 +146,12 @@ new function(jQuery) {
 
     var processed_input = this.pre_process_input( input );
 
+    if( processed_input.length < this.min_chars ) {
+      return;
+    }
+    
+    // TODO: use a string encoding for interpolating url
+    
     // get data from ajax or data
     if( this.url ) {
       var section_id = "#" + this.section_id();
@@ -145,6 +160,11 @@ new function(jQuery) {
 
       // TODO: a mechanism for registering new types
       if( this.url_type == 'json' ) {
+        jQuery.getJSON(this.url, this.remote_params(processed_input), function( data, textStatus ) {
+          // data = self.pre_process_output( data );
+          self.populate( data );
+        });
+      } else if( this.url_type == 'jsonp' ) {
         jQuery.getJSON(this.url, this.remote_params(processed_input), function( data, textStatus ) {
           // data = self.pre_process_output( data );
           self.populate( data );
@@ -215,16 +235,13 @@ new function(jQuery) {
         d.html( self.post_process_output( item ) );
 
         d.mouseover(function() {
-          // TODO: do we really need to iterate here? can't we set all by selector?
-          jQuery(self.drop_selector + " > div").each(function(){
-            this.className = "hotdrop-unselect";
-          });
+          jQuery(self.drop_selector + " > div").attr('class', "hotdrop-unselect");
           this.className = "hotdrop-select";
         });
 
         // on click copy the result text to the search field and hide
-        d.click( function() {
-          putDropListValueInField(self.field, this.childNodes[0].nodeValue, self.hot_drop.input.length, self.hot_drop.multiples);
+        d.click( function(event) {
+          putDropListValueInField(self.hot_drop.field, this.childNodes[0].nodeValue, self.hot_drop.input.length, self.hot_drop.multiples);
           self.hot_drop.clear_drop(self.drop_selector);
           self.field.focus();
           self.field.setCursorPosition( self.field.val().length );
@@ -240,8 +257,13 @@ new function(jQuery) {
   };
 
   function HotDrop(search_field, params) {
-    this.field = search_field
-    this.datasources = params.datasources
+    this.field = search_field;
+    this.datasources = [];
+    // Must clone datasource in case the same DS is used for multiple HotDrops
+    for(var i=0; i < params.datasources.length; i++) {
+      var ds_clone = jQuery.extend({}, params.datasources[i]);
+      this.datasources.push(ds_clone);
+    }
     this.drop_selector = params.drop_selector;
     this.multiples = params.multiples;
     this.input = '';
@@ -309,20 +331,23 @@ new function(jQuery) {
     
     jQuery(this.drop_selector).hide();
     
-    // when anything other than field or drop-down is clicked
-    this.field.blur(function(e) {
-      // alert('blured');
-      
-      var results = jQuery( self.drop_selector );
-      var resPos = results.offset();
-      
-      resPos.bottom = resPos.top + results.height();
-      resPos.right = resPos.left + results.width();
-      
-      if (pageY > resPos.bottom || pageY < resPos.top || pageX < resPos.left || pageX > resPos.right) {
-        self.clear_drop( self.drop_selector );
-      }
-    });
+    // TODO: replace this when fixed in Chrome
+    // // when anything other than field or drop-down is clicked
+    // this.field.blur(function(e) {
+    //   // alert('blured');
+    //   
+    //   var results = jQuery( self.drop_selector );
+    //   var resPos = results.offset();
+    //   
+    //   resPos.bottom = resPos.top + results.height();
+    //   resPos.right = resPos.left + results.width();
+    //   
+    //   alert(pageY + " " + resPos.bottom + " " + resPos.top + "\n" + pageX + " " + resPos.left + " " + resPos.right);
+    //   
+    //   if (pageY > resPos.bottom || pageY < resPos.top || pageX < resPos.left || pageX > resPos.right) {
+    //     self.clear_drop( self.drop_selector );
+    //   }
+    // });
     
     // on key down
     this.field.keydown(function(e) {
@@ -383,7 +408,7 @@ new function(jQuery) {
        || key_code == KEY_UP
        || key_code == KEY_DOWN)
       {
-        return; 
+        return;
       }
 
       var input = self.field.val();

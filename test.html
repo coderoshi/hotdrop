@@ -9,6 +9,8 @@
   <link rel="StyleSheet" type="text/css" href="hotdrop.css" media="screen"/>
 
   <script type="text/javascript">
+  google_ds = null;
+  yahoo_ds = null;
   jQuery(document).ready(function() {
     
     var greetings = ['aloha','bon jorno','ciào','dobré ráno','ello','fakalofa','guten tag','hello','hallo','hi',
@@ -46,56 +48,61 @@
       }]
     });
     
-    // // Remote Datasource
-    // hs6 = new HotDataSource({
-    //   header:   'Google',
-    //   url:      'http://www.google.com/complete/search?hl=en&client=suggest&js=true&q=',
-    //   url_type: 'odjs',
-    //   limit:5,
-    //   remote_params: function(processed_input) {
-    //     return {q:processed_input, hl:'en', client:'suggest', js:'true'};
-    //   },
-    //   post_process_output: function(item) { 
-    //     return item[0];
-    //   }
-    // });
-    // hs7 = new HotDataSource({
-    //   header:   'Yahoo',
-    //   url:      'http://api.search.yahoo.com/WebSearchService/V1/webSearch?appid=hotdrop&output=json&callback=ws_results&results=5&query=',
-    //   url_type: 'odjs',
-    //   limit:5,
-    //   remote_params: function(processed_input) {
-    //     return {query:processed_input, appid:'hotdrop', callback:'ws_results'};
-    //   },
-    //   post_process_output: function(item) { 
-    //     // return item[0];
-    //     return item['Title'];
-    //   }
-    // });
-    // hs1 = new HotDataSource({data:[]});
-    // drop5 = new HotDrop({
-    //   field_id:'odjs',
-    //   drop_id:'odjs_suggest',
-    //   datasources:[hs1, hs6, hs7]
-    // });
-    // drop5.attach();
+    // Remote Datasource
+    $('#odjs').hotdrop({
+      drop_selector:'#odjs_suggest',
+      datasources:[
+      {
+        header:   'Google',
+        url:      'http://www.google.com/complete/search?hl=en&client=suggest&js=true&q=',
+        url_type: 'odjs',
+        limit:    5,
+        // TODO: datasource_callback as string
+        get_datasource: function(ds) {
+          google_ds = ds;
+        },
+        remote_params: function(processed_input) {
+          return {q:processed_input, hl:'en', client:'suggest', js:'true'};
+        },
+        post_process_output: function(item) {
+          return item[0];
+        }
+      },
+      // {
+      //   header:   'Yahoo',
+      //   url:      'http://api.search.yahoo.com/WebSearchService/V1/webSearch?appid=hotdrop&output=json&callback=ws_results&results=5&query=',
+      //   url_type: 'odjs',
+      //   limit:    5,
+      //   get_datasource: function(ds) {
+      //     yahoo_ds = ds;
+      //   },
+      //   remote_params: function(processed_input) {
+      //     return {query:processed_input, appid:'hotdrop', callback:'ws_results'};
+      //   },
+      //   post_process_output: function(item) { 
+      //     // return item[0];
+      //     return item['Title'];
+      //   }
+      // }
+      ]
+    });
   });
   
-  // function ws_results(json) {
-  //   // alert(json['ResultSet']['Result'][0]['Title']);
-  //   hs7.populate(json['ResultSet']['Result']);
-  // }
-  // 
-  // // Datastructure and call-back for Google's JavasScript On-Demand
-  // var google = {
-  //   ac: {
-  //     h: function(val) {
-  //       var term = val[0];
-  //       var data = val[1];
-  //       hs6.populate(data);
-  //     }
-  //   }
-  // };
+  function ws_results(json) {
+    // alert(json['ResultSet']['Result'][0]['Title']);
+    yahoo_ds.populate(json['ResultSet']['Result']);
+  }
+  
+  // Datastructure and call-back for Google's JavasScript On-Demand
+  var google = {
+    ac: {
+      h: function(val) {
+        var term = val[0];
+        var data = val[1];
+        google_ds.populate(data);
+      }
+    }
+  };
   </script>
 
 </head>
